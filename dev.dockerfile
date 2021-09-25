@@ -14,7 +14,7 @@ RUN apt-get update && \
     build-essential=12.4* \
     curlftpfs \
     gdb \
-    git=1:2.17.1* \
+    git \
     lcov \
     libcurl4-openssl-dev \
     libfreetype6-dev \
@@ -33,7 +33,7 @@ RUN apt-get update && \
 
 # Install tools for installers.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    cmake=3.10.2* \
+    gpg-agent \
     curl=7.58.0* \
     g++=4:7.4.0* \
     ninja-build=1.8.2* \
@@ -42,8 +42,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget=1.19.4* \
     zip=3.0* \
     python-minimal \
+    python3.6-dev \
  && rm -rf /var/lib/apt/lists/*
 
+
+# Install cmake
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add - && \
+    apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
+    apt-get update -y && apt-get install -y --no-install-recommends cmake
 
 # Install coding utils for installers.
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -51,6 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zsh  \
     exuberant-ctags \
     libncurses5-dev \
+    python3-dev \
  && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /work && cd /work/ && git clone https://github.com/vim/vim.git && cd /work/vim && \
@@ -68,11 +75,50 @@ RUN mkdir /work && cd /work/ && git clone https://github.com/vim/vim.git && cd /
     make VIMRUNTIMEDIR=/usr/local/share/vim/vim82 && \
     make install
 
+#ARG DOCKER_USER
+#ARG DOCKER_USER_ID
+#ARG DOCKER_GRP
+#ARG DOCKER_GRP_ID
+
+# Add a group to the system.
+#RUN addgroup --gid "$DOCKER_GRP_ID" "$DOCKER_GRP"
+# Add a user to the system.
+#RUN adduser "$DOCKER_USER" \
+      #--uid "$DOCKER_USER_ID" --gid "$DOCKER_GRP_ID" \
+      #--disabled-password --force-badname --gecos '' \
+      #2>/dev/null
+#RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && usermod -aG sudo "$DOCKER_USER"
+
+#USER $DOCKER_USER
+#WORKDIR /home/$DOCKER_USER
+
+
 COPY install.sh /work/zsh/
 
-RUN chsh -s $(which zsh) && \
+RUN sudo chsh -s $(which zsh) && \
     sh /work/zsh/install.sh
 
-RUN cd /work && git clone https://github.com/gpakosz/.tmux.git && cd /root && \
-    ln -s -f /work/.tmux/.tmux.conf && cp /work/.tmux/.tmux.conf.local .
+RUN cd && git clone https://github.com/gpakosz/.tmux.git && \
+    ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .
 
+
+COPY spf13-vim.sh /home/$DOCKER_USER/spf13-vim/
+
+RUN sh /home/$DOCKER_USER/spf13-vim/spf13-vim.sh
+
+RUN cd /root && ln -s -f .spf13-vim-3/.vimrc.before.local && \
+    ln -s -f .spf13-vim-3/.vimrc.local && \
+    vim +BundleInstall! +y +q +q && \
+    ln -s -f /root/.spf13-vim-3/cpp_header_template. /root/.vim/
+
+
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends g++-8
+
+# for the GLIBCXX_3.4.26
+RUN sudo apt-get clean && sudo apt-get update && sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update -y && \
+    sudo apt-get install -y --only-upgrade libstdc++6
+
+RUN cd /root/.vim/bundle/YouCompleteMe/ && \
+    CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer
+
+RUN sudo apt-get install -y --no-install-recommends xclip
