@@ -75,24 +75,6 @@ RUN mkdir /work && cd /work/ && git clone https://github.com/vim/vim.git && cd /
     make VIMRUNTIMEDIR=/usr/local/share/vim/vim82 && \
     make install
 
-#ARG DOCKER_USER
-#ARG DOCKER_USER_ID
-#ARG DOCKER_GRP
-#ARG DOCKER_GRP_ID
-
-# Add a group to the system.
-#RUN addgroup --gid "$DOCKER_GRP_ID" "$DOCKER_GRP"
-# Add a user to the system.
-#RUN adduser "$DOCKER_USER" \
-      #--uid "$DOCKER_USER_ID" --gid "$DOCKER_GRP_ID" \
-      #--disabled-password --force-badname --gecos '' \
-      #2>/dev/null
-#RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && usermod -aG sudo "$DOCKER_USER"
-
-#USER $DOCKER_USER
-#WORKDIR /home/$DOCKER_USER
-
-
 COPY install.sh /work/zsh/
 
 RUN sudo chsh -s $(which zsh) && \
@@ -121,4 +103,9 @@ RUN sudo apt-get clean && sudo apt-get update && sudo add-apt-repository ppa:ubu
 RUN cd /root/.vim/bundle/YouCompleteMe/ && \
     CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer
 
-RUN sudo apt-get install -y --no-install-recommends xclip
+RUN apt-get update -y && \
+    sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
+
+# for bazel 4.1.0
+COPY _bazel /root/.oh-my-zsh/cache/completions
+RUN cd /usr/bin && sudo ln -s -f /root/My_Project/dreame/bazel-4.1.0-linux-arm64 bazel

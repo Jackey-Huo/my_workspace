@@ -62,7 +62,7 @@ echo "Creating container [$NAME] on image [$IMG] ..."
 
 # Prepare cache path.
 mkdir -p $HOME/.cache
-DOCKER_HOME=/home/$USER
+DOCKER_HOME=/root
 
 # Create container.
 docker run -i -d --name $NAME \
@@ -76,8 +76,10 @@ docker run -i -d --name $NAME \
   -v /etc/localtime:/etc/localtime:ro \
   -v /usr/src:/usr/src \
   -v /lib/modules:/lib/modules \
-  -v $HOME/.ssh:$DOCKER_HOME/.ssh \
-  -v $HOME/.cache:$DOCKER_HOME/.cache \
+  -v $HOME/.docker_zshrc:$DOCKER_HOME/.zshrc \
+  -v $HOME/.docker_zcompdump:$DOCKER_HOME/.zcompdump \
+  -v $HOME/.docker_ssh:$DOCKER_HOME/.ssh \
+  -v $HOME/.docker_cache:$DOCKER_HOME/.cache \
   -v $HOME/.zsh_history:$DOCKER_HOME/.zsh_history \
   -v $HOME/install:$DOCKER_HOME/install \
   -v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \
@@ -90,20 +92,3 @@ docker exec $NAME /bin/bash -c \
 
 echo "Container [$NAME] has been created"
 
-# Add current user and group inside the container.
-#if [[ "$USER" != "root" ]]; then
-  #echo "Adding user [$USER] inside the container ..."
-  #docker cp $DIR/docker_adduser.sh $NAME:/tmp
-  #docker exec \
-    #-e DOCKER_USER=$USER \
-    #-e DOCKER_USER_ID=$(id -u) \
-    #-e DOCKER_GRP=$(id -g -n) \
-    #-e DOCKER_GRP_ID=$(id -g) \
-    #$NAME \
-    #bash -c "/tmp/docker_adduser.sh >/dev/null && rm /tmp/docker_adduser.sh"
-  #echo "Done"
-#fi
-
-#docker exec -u $USER \
-       #$NAME \
-       #/bin/bash -c "set -x && cd $DOCKER_HOME && ln -s -f /root/.vim* . && ln -s -f /root/.zsh* ."
