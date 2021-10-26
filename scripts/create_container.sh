@@ -77,7 +77,6 @@ docker run -i -d --name $NAME \
   -v /usr/src:/usr/src \
   -v /lib/modules:/lib/modules \
   -v $HOME/.docker_zshrc:$DOCKER_HOME/.zshrc \
-  -v $HOME/.docker_zcompdump:$DOCKER_HOME/.zcompdump \
   -v $HOME/.docker_ssh:$DOCKER_HOME/.ssh \
   -v $HOME/.docker_cache:$DOCKER_HOME/.cache \
   -v $HOME/.zsh_history:$DOCKER_HOME/.zsh_history \

@@ -107,5 +107,5 @@ RUN apt-get update -y && \
     sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
 
 # for bazel 4.1.0
-COPY _bazel /root/.oh-my-zsh/cache/completions
+COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
 RUN cd /usr/bin && sudo ln -s -f /root/My_Project/dreame/bazel-4.1.0-linux-arm64 bazel
