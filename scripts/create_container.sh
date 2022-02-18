@@ -80,6 +80,7 @@ docker run -i -d --name $NAME \
   -v $HOME/.docker_ssh:$DOCKER_HOME/.ssh \
   -v $HOME/.docker_cache:$DOCKER_HOME/.cache \
   -v $HOME/.zsh_history:$DOCKER_HOME/.zsh_history \
+  -v $HOME/.gitconfig:$DOCKER_HOME/.gitconfig \
   -v $HOME/install:$DOCKER_HOME/install \
   -v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \
   -w $DOCKER_HOME \

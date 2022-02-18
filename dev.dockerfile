@@ -103,8 +103,11 @@ RUN sudo apt-get clean && sudo apt-get update && sudo add-apt-repository ppa:ubu
 RUN cd /root/.vim/bundle/YouCompleteMe/ && \
     CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer
 
-RUN apt-get update -y && \
+RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
+
+RUN sudo apt-get update -y && \
+    sudo apt-get install -y --no-install-recommends python-pip
 
 # for bazel 4.1.0
 COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
