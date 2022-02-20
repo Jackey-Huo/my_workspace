@@ -107,7 +107,8 @@ RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
 
 RUN sudo apt-get update -y && \
-    sudo apt-get install -y --no-install-recommends python-pip
+    sudo apt-get install -y --no-install-recommends python-pip python-numpy \
+        libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
 # for bazel 4.1.0
 COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
