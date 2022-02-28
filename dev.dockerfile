@@ -108,8 +108,10 @@ RUN sudo apt-get update -y && \
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends python-pip python-numpy \
-        libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+        libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev \
+        libeigen3-dev libgoogle-glog-dev libfmt-dev libgtest-dev libboost1.65-dev \
+        libssl-dev less
 
 # for bazel 4.1.0
-COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
-RUN cd /usr/bin && sudo ln -s -f /root/My_Project/dreame/bazel-4.1.0-linux-arm64 bazel
+#COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
+#RUN cd /usr/bin && sudo ln -s -f /root/My_Project/dreame/bazel-4.1.0-linux-arm64 bazel
