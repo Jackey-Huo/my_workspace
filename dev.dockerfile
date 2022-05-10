@@ -2,6 +2,9 @@
 
 FROM ubuntu:18.04
 
+COPY ./sources.list /etc/apt
+
+
 # Set locale.
 RUN apt-get update -y && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
@@ -60,8 +63,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
  && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /work && cd /work/ && git clone https://github.com/vim/vim.git && cd /work/vim && \
-    git checkout v8.2.3434 && \
+COPY install.sh /work/zsh/
+
+RUN sudo chsh -s $(which zsh) && \
+    sh /work/zsh/install.sh
+
+RUN cd && git clone https://github.com/gpakosz/.tmux.git && \
+    ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .
+
+COPY vim-8.2.3434.tar.gz /work/
+
+RUN mkdir -p /work && cd /work/ && tar -xzvf vim-8.2.3434.tar.gz && cd /work/vim && \
     ./configure --with-features=huge \
             --enable-multibyte \
             --enable-rubyinterp=yes \
@@ -74,15 +86,6 @@ RUN mkdir /work && cd /work/ && git clone https://github.com/vim/vim.git && cd /
             --prefix=/usr/local && \
     make VIMRUNTIMEDIR=/usr/local/share/vim/vim82 && \
     make install
-
-COPY install.sh /work/zsh/
-
-RUN sudo chsh -s $(which zsh) && \
-    sh /work/zsh/install.sh
-
-RUN cd && git clone https://github.com/gpakosz/.tmux.git && \
-    ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .
-
 
 COPY spf13-vim.sh /home/$DOCKER_USER/spf13-vim/
 
@@ -112,6 +115,16 @@ RUN sudo apt-get update -y && \
         libeigen3-dev libgoogle-glog-dev libfmt-dev libgtest-dev libboost1.65-dev \
         libssl-dev less
 
-# for bazel 4.1.0
-#COPY _bazel /root/.oh-my-zsh/cache/completions/_bazel
-#RUN cd /usr/bin && sudo ln -s -f /root/My_Project/dreame/bazel-4.1.0-linux-arm64 bazel
+
+COPY yaml-cpp.tar.gz /work/
+COPY glog.tar.gz /work/
+
+RUN cd /work/ && tar -xzvf yaml-cpp.tar.gz && cd /work/yaml-cpp/ && \
+    mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON .. && make -j4 && make install
+
+
+RUN cd /work/ && tar -xzvf glog.tar.gz && cd /work/glog/ && \
+    mkdir -p build && cd build && \
+    cmake -S .. -B build -G "Unix Makefiles" && \
+    cmake --build build --target install
+

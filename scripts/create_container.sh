@@ -78,7 +78,6 @@ docker run -i -d --name $NAME \
   -v /lib/modules:/lib/modules \
   -v $HOME/.docker_zshrc:$DOCKER_HOME/.zshrc \
   -v $HOME/.docker_ssh:$DOCKER_HOME/.ssh \
-  -v $HOME/.docker_cache:$DOCKER_HOME/.cache \
   -v $HOME/.gitconfig:$DOCKER_HOME/.gitconfig \
   -v $HOME/install:$DOCKER_HOME/install \
   -v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \
