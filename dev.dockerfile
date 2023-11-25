@@ -1,6 +1,6 @@
 ###############################################
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 COPY ./sources.list /etc/apt
 
@@ -14,7 +14,7 @@ ENV LANG en_US.utf8
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apt-utils \
-    build-essential=12.4* \
+    build-essential \
     curlftpfs \
     gdb \
     git \
@@ -33,25 +33,25 @@ RUN apt-get update && \
     file \
  && rm -rf /var/lib/apt/lists/*
 
-
+# Set up non-interactive for software-properties-common
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt install -y tzdata && apt install -y -qq software-properties-common
 # Install tools for installers.
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
     gpg-agent \
-    curl=7.58.0* \
-    g++=4:7.4.0* \
-    ninja-build=1.8.2* \
-    software-properties-common=0.96.24* \
-    unzip=6.0* \
-    wget=1.19.4* \
-    zip=3.0* \
-    python-minimal \
-    python3.6-dev \
+    curl \
+    g++ \
+    ninja-build \
+    unzip \
+    wget \
+    zip \
+    python3.8-dev \
  && rm -rf /var/lib/apt/lists/*
 
 
 # Install cmake
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add - && \
-    apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
+    apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main' && \
     apt-get update -y && apt-get install -y --no-install-recommends cmake
 
 # Install coding utils for installers.
@@ -104,15 +104,15 @@ RUN sudo apt-get clean && sudo apt-get update && sudo add-apt-repository ppa:ubu
     sudo apt-get install -y --only-upgrade libstdc++6
 
 RUN cd /root/.vim/bundle/YouCompleteMe/ && \
-    CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer
+    CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer --force-sudo
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
 
 RUN sudo apt-get update -y && \
-    sudo apt-get install -y --no-install-recommends python-pip python-numpy \
+    sudo apt-get install -y --no-install-recommends python3-pip python-numpy \
         libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev \
-        libeigen3-dev libgoogle-glog-dev libfmt-dev libgtest-dev libboost1.65-dev \
+        libeigen3-dev libgoogle-glog-dev libfmt-dev libgtest-dev libboost-dev \
         libssl-dev less
 
 

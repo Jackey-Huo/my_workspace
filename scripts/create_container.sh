@@ -33,6 +33,8 @@ REPO_DIR=${REPO_DIR:-$(
 
 # Set default $IMG and $NAME.
 work_dir_basename=$(basename $REPO_DIR)
+echo "FUCK ${work_dir_basename}; FUCK!! ${REPO_DIR}"
+
 if [[ -z $IMG ]]; then
   # Change camel case to lowercase with dashes(-).
   IMG=$(echo $work_dir_basename | sed 's/[A-Z]/-&/g' | sed 's/^-//')
@@ -76,8 +78,8 @@ docker run -i -d --name $NAME \
   -v /etc/localtime:/etc/localtime:ro \
   -v /usr/src:/usr/src \
   -v /lib/modules:/lib/modules \
-  -v $HOME/.docker_zshrc:$DOCKER_HOME/.zshrc \
-  -v $HOME/.docker_ssh:$DOCKER_HOME/.ssh \
+  -v $REPO_DIR/artifact/files/.docker_zshrc:$DOCKER_HOME/.zshrc \
+  -v $REPO_DIR/artifact/files/.docker_ssh:$DOCKER_HOME/.ssh \
   -v $HOME/.gitconfig:$DOCKER_HOME/.gitconfig \
   -v $HOME/install:$DOCKER_HOME/install \
   -v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \
