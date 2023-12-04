@@ -46,6 +46,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-ins
     wget \
     zip \
     python3.8-dev \
+    libopencv-dev \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -107,7 +108,8 @@ RUN cd /root/.vim/bundle/YouCompleteMe/ && \
     CC=gcc-8 CXX=g++-8 ./install.py --clangd-completer --force-sudo
 
 RUN sudo apt-get update -y && \
-    sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping
+    sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping \
+        nodejs npm
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends python3-pip python-numpy \
