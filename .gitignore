@@ -1,2 +1,4 @@
 .DS_Store
 .ssh
+.docker_ssh
+.docker_cache
