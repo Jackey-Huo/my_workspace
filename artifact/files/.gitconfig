@@ -1,0 +1,12 @@
+[user]
+	email = huojianghao@dreame.tech
+	name = huojianghao
+[core]
+  hooksPath = .git_hooks
+  editor = vim
+[gui]
+	spellingdictionary = none
+[credential]
+	helper = store
+[safe]
+  directory = *

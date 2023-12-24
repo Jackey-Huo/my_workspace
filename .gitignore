@@ -2,3 +2,4 @@
 .ssh
 .docker_ssh
 .docker_cache
+.docker_local

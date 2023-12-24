@@ -63,7 +63,8 @@ fi
 echo "Creating container [$NAME] on image [$IMG] ..."
 
 # Prepare cache path.
-mkdir -p $HOME/.cache
+mkdir -p $REPO_DIR/artifact/files/.docker_cache
+mkdir -p $REPO_DIR/artifact/files/.docker_local
 DOCKER_HOME=/root
 
 # Create container.
@@ -80,7 +81,9 @@ docker run -i -d --name $NAME \
 	-v /lib/modules:/lib/modules \
 	-v $REPO_DIR/artifact/files/.docker_zshrc:$DOCKER_HOME/.zshrc \
 	-v $REPO_DIR/artifact/files/.docker_ssh:$DOCKER_HOME/.ssh \
-	-v $HOME/.gitconfig:$DOCKER_HOME/.gitconfig \
+	-v $REPO_DIR/artifact/files/.docker_cache:$DOCKER_HOME/.cache \
+	-v $REPO_DIR/artifact/files/.docker_local:$DOCKER_HOME/.local \
+	-v $REPO_DIR/artifact/files/.gitconfig:$DOCKER_HOME/.gitconfig \
 	-v $HOME/.config:$DOCKER_HOME/.config \
 	-v $HOME/install:$DOCKER_HOME/install \
 	-v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \

@@ -109,7 +109,9 @@ RUN cd /root/.vim/bundle/YouCompleteMe/ && \
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends xclip tmux tree iputils-ping \
-        nodejs npm
+        nodejs npm \
+        python3-venv \
+        ripgrep
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y --no-install-recommends python3-pip python-numpy \
@@ -129,4 +131,23 @@ RUN cd /work/ && tar -xzvf glog.tar.gz && cd /work/glog/ && \
     mkdir -p build && cd build && \
     cmake -S .. -B build -G "Unix Makefiles" && \
     cmake --build build --target install
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+RUN zsh -c "source ~/.zshrc && nvm install 18"
+
+# Install cmake
+RUN wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh 15 all
+RUN apt-get purge -y libunwind-15 
+
+# Install ceres
+RUN apt-get update && apt-get install -y --no-install-recommends libceres-dev
+
+# Install Sophus
+COPY Sophus-1.0.0.tar.gz /work/
+RUN cd /work/ && tar -xzvf Sophus-1.0.0.tar.gz && cd /work/Sophus-1.0.0/ && \
+    mkdir -p build && cd build && \
+    cmake .. && make -j13 && make install 
+
+# Install neo-vim
+COPY nvim.appimage /work/
 

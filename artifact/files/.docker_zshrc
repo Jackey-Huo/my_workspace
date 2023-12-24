@@ -101,7 +101,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias cd_workspace="cd /root/My_Project/dreame/clean/robot_-simulation-/workspace"
 alias cd_route="cd /root/My_Project/dreame/clean/robot_-simulation-/workspace/route_nodes"
-alias vim="/root/install/nvim.appimage"
+alias vim="/work/nvim.appimage"
 
 export WORKSPACE='/root/My_Project/dreame/clean/robot-simulation'
 export AVA_PLATFORM=m1-ubuntu1804
@@ -123,3 +123,7 @@ export LIBRARY_PATH=/root/My_Project/dreame/clean/robot-simulation/local_libs/us
 export CPLUS_INCLUDE_PATH=/root/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/include:$INCLUDE
 export C_INCLUDE_PATH=/root/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/include:$INCLUDE
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
