@@ -151,3 +151,8 @@ RUN cd /work/ && tar -xzvf Sophus-1.0.0.tar.gz && cd /work/Sophus-1.0.0/ && \
 # Install neo-vim
 COPY nvim.appimage /work/
 
+# Install npm releated packages
+RUN npm install -g commitizen --registry https://registry.npm.taobao.org/
+RUN npm install -g cz-customizable --registry https://registry.npm.taobao.org/
+RUN npm install -g @commitlint/config-conventional @commitlint/cli --registry https://registry.npm.taobao.org/
+
