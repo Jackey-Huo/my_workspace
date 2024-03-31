@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+NOT_RUN_SHELL=$1
 NAME="xxx"
 
 if ! docker ps --format "{{.Names}}" | grep -q "^$NAME$"; then
@@ -12,5 +13,10 @@ if ! docker ps --format "{{.Names}}" | grep -q "^$NAME$"; then
   ./scripts/create_container.sh jackey_dev $NAME
 fi
 
-cd ~/My_Project/my_workspace
-./scripts/exec_container.sh $NAME
+if [[ $NOT_RUN_SHELL != "not_run_shell" ]]; then
+  echo "attach into docker zsh..."
+  cd ~/My_Project/my_workspace
+  ./scripts/exec_container.sh $NAME
+else
+  echo "create container only, do not attach into docker"
+fi 
