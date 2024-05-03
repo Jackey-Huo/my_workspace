@@ -96,6 +96,25 @@ RUN cd /work/ && tar -xzvf glog.tar.gz && cd /work/glog/ && \
     cmake -S .. -B build -G "Unix Makefiles" && \
     sudo cmake --build build --target install
 
+ARG USER_UID=1000
+ARG USER_GID=1000
+ARG USERNAME="username"
+ARG USER_GROUP_NAME="username"
+
+# Add a group to the system.
+RUN addgroup --gid "$USER_GID" "$USER_GROUP_NAME" || true
+# Add a user to the system.
+RUN adduser "$USERNAME" --uid "$USER_UID" --gid "$USER_GID" \
+      --disabled-password --force-badname --gecos '' \
+      2>/dev/null
+# Allow members of group sudo to execute any command.
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+# Add the user to group sudo.
+RUN usermod -aG sudo "$USERNAME"
+
+USER $USERNAME
+WORKDIR /home/$USERNAME
+
 # Install and setup nvm
 RUN sudo npm install -g npm-install-peers
 RUN sudo npm install -g typescript
@@ -116,6 +135,9 @@ RUN sudo apt-get purge -y libunwind-15
 # Install ceres
 RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends libceres-dev
 
+# Set user files ownership to current user, such as .bashrc, .profile, etc.
+RUN sudo chown ${USERNAME}:${USER_GROUP_NAME} /work
+
 # Install Sophus
 COPY Sophus-1.0.0.tar.gz /work/
 RUN cd /work/ && tar -xzvf Sophus-1.0.0.tar.gz && cd /work/Sophus-1.0.0/ && \
@@ -131,3 +153,5 @@ RUN cd /work/ && unzip cilantro-master.zip && cd /work/cilantro-master/ && \
     mkdir -p build && cd build && \
     cmake .. && make -j13 && sudo make install
 
+COPY install.sh /work/zsh/
+RUN sudo chsh -s $(which zsh) && sh /work/zsh/install.sh

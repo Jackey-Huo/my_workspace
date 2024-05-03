@@ -102,25 +102,5 @@ docker exec -u root $NAME /bin/bash -c \
 
 echo "Container [$NAME] has been created"
 
-# Add current user and group inside the container.
-if [[ "$USER" != "root" ]]; then
-  echo "Adding user [$USER] inside the container ..."
-  docker cp $DIR/docker_adduser.sh $NAME:/tmp
-  docker exec -u root \
-    -e DOCKER_USER=$USER \
-    -e DOCKER_USER_ID=$(id -u) \
-    -e DOCKER_GRP=$(id -g -n) \
-    -e DOCKER_GRP_ID=$(id -g) \
-    $NAME \
-    bash -c "/tmp/docker_adduser.sh >/dev/null && rm /tmp/docker_adduser.sh"
-  echo "Done"
-fi
-
-# 安装oh my zsh
-export all_proxy=socks5://192.168.0.11:20170
-docker exec -u $USER $NAME /bin/bash -c \
-  'set -e && set -x && sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-
-
 docker exec -u $USER $NAME /bin/bash -c \
   'cat ~/.zshrc_append >> ~/.zshrc'
