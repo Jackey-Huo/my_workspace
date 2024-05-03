@@ -33,13 +33,6 @@ return {
   -- disable trouble
   { "folke/trouble.nvim", enabled = false },
 
-  -- add symbols-outline
-  {
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-    config = true,
-  },
 
   -- override nvim-cmp and add cmp-emoji
   {
@@ -361,7 +354,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    enabled = false,
+    enabled = true,
     build = ":Copilot auth",
     opts = {
       suggestion = { enabled = false },
@@ -435,6 +428,21 @@ return {
 {
   "tpope/vim-fugitive",
   enabled = true,
+},
+
+{
+  "preservim/nerdcommenter",
+  enabled = true,
+
+
+},
+
+-- add symbols-outline
+{
+  "simrat39/symbols-outline.nvim",
+  cmd = "SymbolsOutline",
+  keys = { { "<leader>ce", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+  config = true,
 },
 
 }
