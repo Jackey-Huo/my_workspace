@@ -1,0 +1,29 @@
+alias cd_workspace="cd ~/My_Project/dreame/clean/robot_-simulation-/workspace"
+alias cd_route="cd ~/My_Project/dreame/clean/robot_-simulation-/workspace/route_nodes"
+alias vim="/work/nvim.appimage"
+
+export WORKSPACE='~/My_Project/dreame/clean/robot-simulation'
+export AVA_PLATFORM=m1-ubuntu1804
+#export AVA_PROJECT_NUMBER=2275
+#export AVA_PROJECT_NUMBER=R2104
+#export AVA_PROJECT_NUMBER=2114
+export AVA_PROJECT_NUMBER=R2228
+#export AVA_PROJECT_NAME=moros
+#export AVA_PROJECT_NAME=aether
+#export AVA_PROJECT_NAME=nemesis
+export AVA_PROJECT_NAME=arges
+export BUILD_DIR='build_m1_ubuntu1804'
+export PROJECT_BUILD_DIR='build_m1_ubuntu1804_'${AVA_PROJECT_NAME}
+export CMAKE_PREFIX='-DCMAKE_PREFIX_PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local'
+export DEST_DIR='DESTDIR=~/My_Project/dreame/clean/robot-simulation/local_libs/'
+export PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/bin:$PATH
+export LD_LIBRARY_PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/lib:$WORKSPACE/ava-common/platforms/$AVA_PLATFORM/lib/
+export LIBRARY_PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/lib:$LIBRARY_PATH:$WORKSPACE/ava-common/platforms/$AVA_PLATFORM/lib/
+export CPLUS_INCLUDE_PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/include:$INCLUDE
+export C_INCLUDE_PATH=~/My_Project/dreame/clean/robot-simulation/local_libs/usr/local/include:$INCLUDE
+
+export HISTFILE=~/.zsh_history_host
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

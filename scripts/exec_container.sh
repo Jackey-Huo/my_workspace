@@ -35,5 +35,7 @@ fi
   #-u $USER \
   #-e USER \
 docker exec -it \
+  -u $USER \
+  -e USER \
   $NAME \
   /bin/zsh

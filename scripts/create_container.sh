@@ -65,7 +65,10 @@ echo "Creating container [$NAME] on image [$IMG] ..."
 # Prepare cache path.
 mkdir -p $REPO_DIR/artifact/files/.docker_cache
 mkdir -p $REPO_DIR/artifact/files/.docker_local
-DOCKER_HOME=/root
+DOCKER_HOME=/home/$USER
+if [[ "$USER" == "root" ]]; then
+  DOCKER_HOME=/root
+fi
 
 # Create container.
 docker run -i -d --name $NAME \
@@ -76,14 +79,14 @@ docker run -i -d --name $NAME \
 	--add-host $(hostname):127.0.0.1 \
 	--pid host \
 	--shm-size 2G \
-	-v /etc/localtime:/etc/localtime:ro \
+	-v /etc/localtime:/etc/localtime \
 	-v /usr/src:/usr/src \
 	-v /lib/modules:/lib/modules \
-	-v $REPO_DIR/artifact/files/.docker_zshrc:$DOCKER_HOME/.zshrc \
 	-v $REPO_DIR/artifact/files/.docker_ssh:$DOCKER_HOME/.ssh \
 	-v $REPO_DIR/artifact/files/.docker_cache:$DOCKER_HOME/.cache \
 	-v $REPO_DIR/artifact/files/.docker_local:$DOCKER_HOME/.local \
 	-v $REPO_DIR/artifact/files/.gitconfig:$DOCKER_HOME/.gitconfig \
+  -v $HOME/.zsh_history:$DOCKER_HOME/.zsh_history_host \
 	-v $HOME/.config:$DOCKER_HOME/.config \
 	-v $HOME/install:$DOCKER_HOME/install \
 	-v $HOME/My_Project/dreame:$DOCKER_HOME/My_Project/dreame \
@@ -91,7 +94,33 @@ docker run -i -d --name $NAME \
 	$IMG \
 	/bin/bash
 
-docker exec $NAME /bin/bash -c \
-	'printf "\n\n180.163.151.33 dl.google.com\n192.168.10.10 jfrog.dreame.com\n192.168.10.10 git.dreame.com" >> /etc/hosts'
+docker cp $REPO_DIR/artifact/files/.docker_dumy_zshrc $NAME:$DOCKER_HOME/.zshrc
+docker cp $REPO_DIR/artifact/files/.docker_zshrc_append $NAME:$DOCKER_HOME/.zshrc_append
+
+docker exec -u root $NAME /bin/bash -c \
+  'printf "\n\n180.163.151.33 dl.google.com\n192.168.10.10 jfrog.dreame.com\n192.168.10.10 git.dreame.com" >> /etc/hosts'
 
 echo "Container [$NAME] has been created"
+
+# Add current user and group inside the container.
+if [[ "$USER" != "root" ]]; then
+  echo "Adding user [$USER] inside the container ..."
+  docker cp $DIR/docker_adduser.sh $NAME:/tmp
+  docker exec -u root \
+    -e DOCKER_USER=$USER \
+    -e DOCKER_USER_ID=$(id -u) \
+    -e DOCKER_GRP=$(id -g -n) \
+    -e DOCKER_GRP_ID=$(id -g) \
+    $NAME \
+    bash -c "/tmp/docker_adduser.sh >/dev/null && rm /tmp/docker_adduser.sh"
+  echo "Done"
+fi
+
+# 安装oh my zsh
+export all_proxy=socks5://192.168.0.11:20170
+docker exec -u $USER $NAME /bin/bash -c \
+  'set -e && set -x && sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+
+
+docker exec -u $USER $NAME /bin/bash -c \
+  'cat ~/.zshrc_append >> ~/.zshrc'
