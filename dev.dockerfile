@@ -155,3 +155,6 @@ RUN cd /work/ && unzip cilantro-master.zip && cd /work/cilantro-master/ && \
 
 COPY install.sh /work/zsh/
 RUN sudo chsh -s $(which zsh) && sh /work/zsh/install.sh
+
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends liblz4-dev
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends unrar

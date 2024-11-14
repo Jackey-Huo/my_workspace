@@ -3,7 +3,7 @@
 	name = huojianghao
 [core]
   hooksPath = .git_hooks
-  editor = vim
+  editor = /work/nvim.appimage
 [gui]
 	spellingdictionary = none
 [credential]
