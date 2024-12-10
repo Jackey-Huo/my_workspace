@@ -32,4 +32,5 @@ case "$PACKAGE_LOG_NAME" in
 esac
 
 # find all data.bin and expand the stereo data
-find fuck/ -type f -name "data.bin" -exec sh -c 'echo "Found: {}, start expand stereo_image_gray" && ./dmreader-1.4.2-linux-x86_64/dmreader x --topic stereo_image_gray --output . {}' ';'
+find fuck/ -type f -name "data.bin" -exec sh -c \
+  'echo "Found: {}, start expand stereo_image_gray" && ./dmreader-1.5.0-linux-x86_64/dmreader x --topic stereo_image_gray --output . {}' ';'

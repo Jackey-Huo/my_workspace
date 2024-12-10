@@ -43,4 +43,4 @@ fi
 # 打印最终的路径字符串
 echo "$data_bin_paths"
 
-./dmreader-1.4.2-linux-x86_64/dmreader convert $data_bin_paths -output=data.mcap
+./dmreader-1.5.0-linux-x86_64/dmreader convert $data_bin_paths -output=data.mcap

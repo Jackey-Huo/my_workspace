@@ -54,7 +54,7 @@ rm -rf ./calibration_result_stereo.json
 echo "Copy calib file and slamdata to Slam_Replay"
 # move right calib file
 find $WORKSPACE/recorder/build/fuck -type f -name "lds_config.json" -exec sh -c 'cp {} .' ';'
-find $WORKSPACE/recorder/build/fuck -type f -name "lds_config.json" -exec sh -c 'cp {} .' ';'
+find $WORKSPACE/recorder/build/fuck -type f -name "calibration_result_stereo.json" -exec sh -c 'cp {} .' ';'
 # move slamdata bigger than 5MB
 find $WORKSPACE/recorder/build/fuck -type f -name "*.slamdata" -size +5M -exec sh -c 'cp {} .' ';'
 
